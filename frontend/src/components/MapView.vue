@@ -14,7 +14,11 @@ import Point from "ol/geom/Point";
 import { fromLonLat } from "ol/proj";
 import { Style, Stroke, Fill, Icon } from "ol/style";
 
-const WS_SERVER = "ws://localhost:3000";
+//const WS_SERVER = "ws://localhost:3000";
+//const WS_SERVER = "ws://192.168.178.21:3000";
+
+const WS_SERVER = `ws://${window.location.hostname}:3000`;
+//const WS_SERVER = "ws://149.222.149.246:3000";
 const WMS_BASE_URL = "https://sgx.geodatenzentrum.de/wms_topplus_open";
 
 const BBOX_W = 10.0;
@@ -46,7 +50,13 @@ const isMobileView = computed(() => {
   return window.innerWidth < 768;
 });
 
-const localUserId = crypto.randomUUID();
+//const localUserId = crypto.randomUUID();
+//avoiding fallback
+const localUserId =
+  typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
 
 type RemoteUser = { userId: string; color: string; lastSeen: number; marker?: Feature<Point> };
 const remoteUsers = reactive<Record<string, RemoteUser>>({});
@@ -291,7 +301,7 @@ onMounted(async () => {
       (err) => {
         console.warn("Geolocation error", err);
       },
-      { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 },
+      { enableHighAccuracy: true, maximumAge: 1000, timeout: 30000 },
     );
   } else {
     console.warn("Geolocation not supported");
@@ -319,8 +329,8 @@ function toggleBase() {
     <button 
       v-if="isMobileView"
       class="mobile-menu-toggle"
-      @click="sidebarOpen = !sidebarOpen"
       :aria-label="sidebarOpen ? 'Close menu' : 'Open menu'"
+      @click="sidebarOpen = !sidebarOpen"
     >
       {{ sidebarOpen ? '✕ Close' : '☰ Menu' }}
     </button>
@@ -336,8 +346,8 @@ function toggleBase() {
       <div class="controls-section">
         <button
           class="control-button"
-          @click="toggleBase"
           aria-label="Toggle base WMS layer visibility"
+          @click="toggleBase"
         >
           {{ showBase ? "Hide Base (WMS)" : "Show Base (WMS)" }}
         </button>

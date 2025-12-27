@@ -29,15 +29,20 @@ A Node.js WebSocket server handles real-time communication between users.
 ## Project Structure :
 
 project-root/
+├─ frontend/          # Vue 3 + Vite + TypeScript app (MapView.vue)
+│  └─ src/
+│     └─ components/
+│        └─ MapView.vue
 │
-├── frontend/        # Vue 3 + Vite app (MapView.vue)
-│   └── src/
-│       └── components/MapView.vue
+├─ backend/           # Optional
+│  └─ src/
+│     └─ routes/
+│        └─ server.ts
 │
-├── backend/         # Node.js WebSocket server
-│   └── server.js
-│
-└── README.md
+├─ server.js          # Main Node.js WebSocket server used by the app (small js module)
+├─ package.json       # Root package
+└─ README.md
+
 
 ## Prerequisites
 - Node.js (version 18+ recommended)
@@ -56,16 +61,23 @@ project-root/
 
 1. Start the WebSocket Server
 
-    Navigate to the backend folder: (In Terminal)
+    Navigate to the root folder: (In Terminal)
 
-    cd backend
     npm install
     node server.js
 
 This starts the WebSocket server on:
 ws://localhost:3000
 
-2. Run the Frontend (Vue Application)
+*// optional //*
+
+2. Run the backend 
+
+    cd backend
+    npm install
+    npm run dev
+
+3. Run the Frontend (Vue Application)
     Navigate to the frontend folder: (In Terminal)
 
     cd frontend
@@ -75,7 +87,7 @@ ws://localhost:3000
 The frontend will be available at:
 http://localhost:5173
 
-3. Using the Application
+4. Using the Application
 
 Open the frontend URL in your browser.
 Allow geolocation access when prompted.
